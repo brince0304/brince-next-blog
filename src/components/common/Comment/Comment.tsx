@@ -1,6 +1,6 @@
 'use client';
 
-import Avatar from '@/components/Avatar/Avatar';
+import Avatar from '@/components/common/Avatar/Avatar';
 import Button from '@/components/common/Button/Button';
 import { formatDistanceToNow } from 'date-fns';
 import type React from 'react';
