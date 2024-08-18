@@ -7,7 +7,8 @@ const meta: Meta<typeof Avatar> = {
   tags: ['autodocs'],
 
   argTypes: {
-    username: { control: 'text' },
+    owner: { control: 'boolean' },
+    liked: { control: 'boolean' },
     size: { control: 'number' },
     className: { control: 'text' },
   },
@@ -18,7 +19,8 @@ type Story = StoryObj<typeof Avatar>;
 
 export const Default: Story = {
   args: {
-    username: '김철수',
+    owner: false,
+    liked: false,
     size: 40,
   },
 };
