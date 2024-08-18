@@ -18,7 +18,6 @@ const config: Config = {
       pretendard: ['var(--font-pretendard)', 'sans-serif'],
     },
   },
-  darkMode: 'class',
   plugins: [],
 };
 export default config;

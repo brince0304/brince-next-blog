@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import PostCard from './PostCard'; // 실제 경로에 맞게 수정해주세요
 
 const meta: Meta<typeof PostCard> = {
-  title: 'Components/PostCard',
+  title: '컴포넌트/포스트카드',
   component: PostCard,
   tags: ['autodocs'],
   argTypes: {
@@ -54,7 +54,7 @@ export const 여러개카드: Story = {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <PostCard {...args} />
       <PostCard {...args} title="두 번째 포스트" slug="second-post" />
-      <PostCard {...args} title="세 번째 포스트" slug="third-post" thumbnailSrc={null} />
+      <PostCard {...args} title="세 번째 포스트" slug="third-post" thumbnailSrc={undefined} />
     </div>
   ),
   args: {
