@@ -1,13 +1,12 @@
-import type { NotionDatabaseQueryResponse, NotionPage, NotionPagesResponse } from '@/models/notion';
+import type { CommentRequest, NotionPage, NotionPagesResponse } from '@/models/notion';
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
 
 export const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-export const guestNotion = new Client();
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
-export async function getPosts() {
+async function getPosts() {
   try {
     const response = await notion.databases.query({
       database_id: process.env.NOTION_DATABASE_ID as string,
@@ -30,10 +29,120 @@ export async function getPosts() {
   }
 }
 
-export async function getComments(pageId: string) {
+async function likePost(pageId: string) {
   try {
-    const response = await notion.comments.list({
-      block_id: pageId,
+    const response = await notion.pages.update({
+      page_id: pageId,
+      properties: {
+        Likes: {
+          type: 'number',
+          number: 1,
+        },
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.error('Error liking post:', error);
+  }
+}
+
+async function createCommentPage(pageId: string, data: CommentRequest) {
+  try {
+    const { text, author, parentId } = data;
+
+    await notion.pages.create({
+      parent: {
+        database_id: process.env.NOTION_COMMENT_DATABASE_ID as string,
+      },
+      properties: {
+        PageId: {
+          type: 'rich_text',
+          rich_text: [
+            {
+              type: 'text',
+              text: {
+                content: pageId,
+              },
+            },
+          ],
+        },
+        Comment: {
+          type: 'title',
+          title: [
+            {
+              type: 'text',
+              text: {
+                content: text,
+              },
+            },
+          ],
+        },
+        Author: {
+          type: 'rich_text',
+          rich_text: [
+            {
+              type: 'text',
+              text: {
+                content: author,
+              },
+            },
+          ],
+        },
+        ParentId: {
+          type: 'rich_text',
+          rich_text: [
+            {
+              type: 'text',
+              text: {
+                content: parentId || '',
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    const comments = await notion.databases.query({
+      database_id: process.env.NOTION_COMMENT_DATABASE_ID as string,
+      filter: {
+        property: 'PageId',
+        rich_text: {
+          equals: pageId,
+        },
+      },
+    });
+
+    await notion.pages.update({
+      page_id: pageId,
+      properties: {
+        Comments: {
+          type: 'number',
+          number: comments.results.length,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error creating comment page:', error);
+  }
+}
+
+async function getComments(pageId: string) {
+  try {
+    const response = await notion.databases.query({
+      database_id: process.env.NOTION_COMMENT_DATABASE_ID as string,
+      filter: {
+        property: 'PageId',
+        rich_text: {
+          equals: pageId,
+        },
+      },
+      sorts: [
+        {
+          property: 'CreatedAt',
+          direction: 'ascending',
+        },
+      ],
     });
 
     return response.results;
@@ -43,53 +152,42 @@ export async function getComments(pageId: string) {
   }
 }
 
-export async function postComment(pageId: string, text: string) {
+async function getPageBySlug(slug: string) {
+  if (!slug) {
+    return null;
+  }
+
   try {
-    await guestNotion.comments.create({
-      parent: {
-        page_id: pageId,
-      },
-      rich_text: [
-        {
-          type: 'text',
-          text: {
-            content: text,
-          },
+    const databaseId = process.env.NOTION_DATABASE_ID;
+
+    const response = await notion.databases.query({
+      database_id: databaseId as string,
+      filter: {
+        property: 'Slug',
+        rich_text: {
+          equals: slug,
         },
-      ],
-    });
-  } catch (error) {
-    console.error('Error posting comment:', error);
-  }
-}
-
-// TODO: 추후 에러 핸들링 추가
-export async function getPageBySlug(slug: string) {
-  const databaseId = process.env.NOTION_DATABASE_ID;
-
-  // Query the database to find the page with the given slug
-  const response = (await notion.databases.query({
-    database_id: databaseId as string,
-    filter: {
-      property: 'Slug',
-      rich_text: {
-        equals: slug,
       },
-    },
-  })) as NotionDatabaseQueryResponse;
+    });
 
-  if (response.results.length === 0) {
-    throw new Error('Page not found');
+    const page = response.results[0] as NotionPage;
+    const pageId = page.id;
+
+    const mdblocks = await n2m.pageToMarkdown(pageId);
+    const mdString = n2m.toMarkdownString(mdblocks);
+
+    return {
+      page,
+      markdown: mdString,
+    };
+  } catch (error) {
+    console.error('Error fetching page:', error);
   }
-
-  const page = response.results[0] as NotionPage;
-  const pageId = page.id;
-
-  const mdblocks = await n2m.pageToMarkdown(pageId);
-  const mdString = n2m.toMarkdownString(mdblocks);
-
-  return {
-    page,
-    markdown: mdString,
-  };
 }
+
+export const notionClient = {
+  getPosts,
+  getComments,
+  createCommentPage,
+  getPageBySlug,
+};

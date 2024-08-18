@@ -85,6 +85,18 @@ interface NotionMultiSelect {
   }[];
 }
 
+interface NotionNumber {
+  id: string;
+  type: 'number';
+  number: number;
+}
+
+interface NotionCreatedTime {
+  id: string;
+  type: 'created_time';
+  created_time: string;
+}
+
 interface NotionProperties {
   Title: NotionTitle;
   Date: NotionDate;
@@ -93,6 +105,9 @@ interface NotionProperties {
   Thumbnail: NotionURL;
   Slug: NotionRichTextProperty;
   Tags: NotionMultiSelect;
+  Comments: NotionNumber;
+  Likes: NotionNumber;
+  CreatedAt: NotionCreatedTime;
 }
 
 export interface NotionPage extends PageObjectResponse {
@@ -118,3 +133,9 @@ export interface NotionDatabaseQueryResponse extends QueryDatabaseResponse {
 }
 
 export type NotionPagesResponse = NotionDatabaseQueryResponse['results'];
+
+export interface CommentRequest {
+  text: string;
+  author: string;
+  parentId?: string;
+}
