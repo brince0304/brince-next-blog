@@ -1,12 +1,12 @@
 import type React from 'react';
 
-interface TextProps {
+interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children: React.ReactNode;
   variant?: 'h1' | 'h2' | 'h3' | 'body' | 'body-large' | 'body-small' | 'emphasis';
   className?: string;
 }
 
-const Text: React.FC<TextProps> = ({ children, variant = 'body', className = '' }) => {
+const Text: React.FC<TextProps> = ({ children, variant = 'body', className = '', ...props }) => {
   const baseStyles = 'transition-colors duration-200';
 
   const variantStyles = {
@@ -23,13 +23,29 @@ const Text: React.FC<TextProps> = ({ children, variant = 'body', className = '' 
 
   switch (variant) {
     case 'h1':
-      return <h1 className={combinedClassName}>{children}</h1>;
+      return (
+        <h1 className={combinedClassName} {...props}>
+          {children}
+        </h1>
+      );
     case 'h2':
-      return <h2 className={combinedClassName}>{children}</h2>;
+      return (
+        <h2 className={combinedClassName} {...props}>
+          {children}
+        </h2>
+      );
     case 'h3':
-      return <h3 className={combinedClassName}>{children}</h3>;
+      return (
+        <h3 className={combinedClassName} {...props}>
+          {children}
+        </h3>
+      );
     default:
-      return <p className={combinedClassName}>{children}</p>;
+      return (
+        <p className={combinedClassName} {...props}>
+          {children}
+        </p>
+      );
   }
 };
 
