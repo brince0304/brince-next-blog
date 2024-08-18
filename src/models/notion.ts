@@ -107,6 +107,7 @@ interface NotionProperties {
   Tags: NotionMultiSelect;
   Comments: NotionNumber;
   Likes: NotionNumber;
+  Liked: NotionCheckbox;
   CreatedAt: NotionCreatedTime;
 }
 
