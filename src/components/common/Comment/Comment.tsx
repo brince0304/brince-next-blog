@@ -12,15 +12,14 @@ export interface CommentProps {
   content: string;
   createdAt: string;
   liked?: boolean;
-  avatar?: string;
   owner?: boolean;
 }
 
-const Comment: React.FC<CommentProps> = ({ author, content, createdAt, liked, avatar, owner }) => {
+const Comment: React.FC<CommentProps> = ({ author, content, createdAt, liked, owner }) => {
   return (
     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 mb-4 shadow-md transition-colors duration-200">
       <div className="flex items-center mb-2">
-        {avatar && <Avatar size={32} className={'mr-2'} owner={owner} />}
+        <Avatar size={32} className={'mr-2'} owner={owner} />
         <div>
           <Text variant="emphasis">{owner ? '주인장' : author}</Text>
           <Text variant="body-small" className="text-gray-500 dark:text-gray-400">

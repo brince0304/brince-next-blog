@@ -9,8 +9,7 @@ const meta: Meta<typeof Comment> = {
     author: { control: 'text' },
     content: { control: 'text' },
     createdAt: { control: 'date' },
-    likes: { control: 'number' },
-    avatar: { control: 'text' },
+    liked: { control: 'boolean' },
   },
 };
 
@@ -22,8 +21,7 @@ export const Default: Story = {
     author: '김철수',
     content: '정말 좋은 글이네요. 많은 도움이 되었습니다!',
     createdAt: new Date('2024-03-15T09:00:00').toISOString(),
-    likes: 5,
-    avatar: 'https://via.placeholder.com/40',
+    liked: true,
   },
 };
 
@@ -35,24 +33,10 @@ export const LongComment: Story = {
   },
 };
 
-export const ManyLikes: Story = {
-  args: {
-    ...Default.args,
-    likes: 999,
-  },
-};
-
 export const RecentComment: Story = {
   args: {
     ...Default.args,
     createdAt: new Date().toISOString(),
-  },
-};
-
-export const NoAvatar: Story = {
-  args: {
-    ...Default.args,
-    avatar: undefined,
   },
 };
 
