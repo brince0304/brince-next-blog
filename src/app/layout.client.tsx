@@ -1,3 +1,5 @@
+'use client'
+
 import Header from '@/components/common/Header/Header';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
