@@ -4,13 +4,15 @@ import Logo from '@/components/common/Logo/Logo';
 import { usePathname } from 'next/navigation';
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
 interface HeaderProps {
   menuItems: { name: string; path: string }[];
 }
 
-const ThemeToggle = dynamic(() => import('@/components/common/ThemeToggle/ThemeToggle'), { ssr: false });
+const ThemeToggle = dynamic(() => import('@/components/common/ThemeToggle/ThemeToggle'), {
+  ssr: false,
+});
 
 const Header: React.FC<HeaderProps> = ({ menuItems }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

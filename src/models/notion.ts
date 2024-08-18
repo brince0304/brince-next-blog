@@ -1,4 +1,7 @@
-import type {PageObjectResponse, QueryDatabaseResponse} from "@notionhq/client/build/src/api-endpoints";
+import type {
+  PageObjectResponse,
+  QueryDatabaseResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 
 interface NotionUser {
   object: 'user';
@@ -73,13 +76,13 @@ interface NotionSelect {
 }
 
 interface NotionMultiSelect {
+  id: string;
+  type: 'multi_select';
+  multi_select: {
     id: string;
-    type: 'multi_select';
-    multi_select: {
-        id: string;
-        name: string;
-        color: string;
-    }[];
+    name: string;
+    color: string;
+  }[];
 }
 
 interface NotionProperties {
@@ -92,22 +95,22 @@ interface NotionProperties {
   Tags: NotionMultiSelect;
 }
 
-export interface NotionPage extends PageObjectResponse  {
+export interface NotionPage extends PageObjectResponse {
   id: string;
   created_time: string;
   last_edited_time: string;
   created_by: NotionUser;
   last_edited_by: NotionUser;
   properties: NotionProperties & {
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        [key: string]: any;
-  }
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    [key: string]: any;
+  };
   parent: NotionParent;
   archived: boolean;
   url: string;
 }
 
-export interface NotionDatabaseQueryResponse extends QueryDatabaseResponse{
+export interface NotionDatabaseQueryResponse extends QueryDatabaseResponse {
   object: 'list';
   results: NotionPage[];
   next_cursor: string | null;

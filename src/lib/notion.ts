@@ -1,6 +1,6 @@
-import type {NotionDatabaseQueryResponse, NotionPage, NotionPagesResponse} from '@/models/notion';
+import type { NotionDatabaseQueryResponse, NotionPage, NotionPagesResponse } from '@/models/notion';
 import { Client } from '@notionhq/client';
-import {NotionToMarkdown} from "notion-to-md";
+import { NotionToMarkdown } from 'notion-to-md';
 
 export const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
@@ -44,23 +44,23 @@ export async function getComments(pageId: string) {
 }
 
 export async function postComment(pageId: string, text: string) {
-    try {
-        await guestNotion.comments.create({
-          parent: {
-            page_id: pageId,
+  try {
+    await guestNotion.comments.create({
+      parent: {
+        page_id: pageId,
+      },
+      rich_text: [
+        {
+          type: 'text',
+          text: {
+            content: text,
           },
-          rich_text: [
-            {
-              type: 'text',
-              text: {
-                content: text,
-              },
-            },
-          ],
-        });
-    } catch (error) {
-        console.error('Error posting comment:', error);
-    }
+        },
+      ],
+    });
+  } catch (error) {
+    console.error('Error posting comment:', error);
+  }
 }
 
 // TODO: 추후 에러 핸들링 추가
@@ -68,15 +68,15 @@ export async function getPageBySlug(slug: string) {
   const databaseId = process.env.NOTION_DATABASE_ID;
 
   // Query the database to find the page with the given slug
-  const response = await notion.databases.query({
+  const response = (await notion.databases.query({
     database_id: databaseId as string,
     filter: {
       property: 'Slug',
       rich_text: {
-        equals: slug
-      }
-    }
-  }) as NotionDatabaseQueryResponse;
+        equals: slug,
+      },
+    },
+  })) as NotionDatabaseQueryResponse;
 
   if (response.results.length === 0) {
     throw new Error('Page not found');
