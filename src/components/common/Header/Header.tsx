@@ -1,20 +1,21 @@
 'use client';
 import ButtonLink from '@/components/common/LinkButton/LinkButton';
 import Logo from '@/components/common/Logo/Logo';
-import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import dynamic from "next/dynamic";
 
 interface HeaderProps {
   menuItems: { name: string; path: string }[];
 }
 
+const ThemeToggle = dynamic(() => import('@/components/common/ThemeToggle/ThemeToggle'), { ssr: false });
+
 const Header: React.FC<HeaderProps> = ({ menuItems }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -55,12 +56,7 @@ const Header: React.FC<HeaderProps> = ({ menuItems }) => {
           </nav>
 
           <div className="flex items-center">
-            <ButtonLink
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-            >
-              {theme === 'dark' ? '🌙' : '☀'}
-            </ButtonLink>
+            <ThemeToggle />
             <ButtonLink
               onClick={toggleMenu}
               className="md:hidden ml-4 p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
