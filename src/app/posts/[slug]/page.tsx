@@ -1,7 +1,6 @@
+import Text from '@/components/common/Text/Text';
 import { getComments, getPageBySlug } from '@/lib/notion';
 import ReactMarkdown from 'react-markdown';
-import Text from '@/components/common/Text/Text';
-import CommentForm from '@/components/CommentForm/CommentForm';
 
 export default async function Post({ params }: { params: { slug: string } }) {
   const post = await getPageBySlug(params.slug);
@@ -21,7 +20,6 @@ export default async function Post({ params }: { params: { slug: string } }) {
           <Text variant={'body-small'}>{comment.created_time}</Text>
         </div>
       ))}
-      <CommentForm pageId={post.page.id} />
     </article>
   );
 }
