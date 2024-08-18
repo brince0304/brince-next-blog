@@ -1,3 +1,4 @@
+import Text from '@/components/common/Text/Text';
 import Image from 'next/image';
 import Link from 'next/link';
 import type React from 'react';
@@ -6,20 +7,29 @@ interface PostCardProps {
   title: string;
   excerpt: string;
   slug: string;
-  thumbnailSrc?: string;
+  thumbnailSrc: string | null;
 }
 
 const cardClasses = {
-  container:
-    'bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl flex flex-col md:flex-row',
+  container: `bg-white dark:bg-gray-800 
+  rounded-lg 
+  shadow-sm dark:shadow-md
+  dark:shadow-gray-900/10
+  overflow-hidden 
+  transition-all duration-300 
+  transform hover:scale-[1.02] 
+  hover:shadow-lg dark:hover:shadow-lg
+  dark:hover:shadow-gray-900/20
+  flex flex-col md:flex-row
+  `,
   imageWrapper: 'md:w-1/3 relative h-48 md:h-auto',
   image: 'transition-opacity duration-300 hover:opacity-90',
   contentWrapper: 'p-6 relative flex-1',
   hoverEffect:
-    'absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-500 opacity-0 hover:opacity-10 transition-opacity duration-300',
-  title: 'text-2xl font-bold mb-2 text-gray-800',
-  excerpt: 'text-gray-600 mb-4',
-  readMoreWrapper: 'mt-auto flex items-center text-sm text-gray-500',
+    'absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-500 dark:from-purple-600 dark:to-pink-700 opacity-0 hover:opacity-10 transition-opacity duration-300',
+  title: 'font-bold mb-2',
+  excerpt: 'mb-4',
+  readMoreWrapper: 'mt-auto flex items-center text-sm text-gray-500 dark:text-gray-400',
   readMoreText: 'mr-2',
   readMoreIcon: 'h-4 w-4 animate-pulse',
 };
@@ -32,18 +42,24 @@ const PostCard: React.FC<PostCardProps> = ({ title, excerpt, slug, thumbnailSrc 
           <Image
             src={thumbnailSrc}
             alt={title}
-            layout="fill"
-            objectFit="cover"
+            fill
+            objectFit={'cover'}
             className={cardClasses.image}
           />
         </div>
       )}
       <div className={cardClasses.contentWrapper}>
         <div className={cardClasses.hoverEffect} />
-        <h2 className={cardClasses.title}>{title}</h2>
-        <p className={cardClasses.excerpt}>{excerpt}</p>
+        <Text variant={'h2'} className={cardClasses.title}>
+          {title}
+        </Text>
+        <Text variant={'body'} className={cardClasses.excerpt}>
+          {excerpt}
+        </Text>
         <div className={cardClasses.readMoreWrapper}>
-          <span className={cardClasses.readMoreText}>Read more</span>
+          <Text variant={'body-small'} className={cardClasses.readMoreText}>
+            Read more
+          </Text>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className={cardClasses.readMoreIcon}
