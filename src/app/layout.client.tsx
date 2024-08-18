@@ -1,14 +1,11 @@
 'use client';
 
 import Header from '@/components/common/Header/Header';
-import { ThemeProvider } from 'next-themes';
-import type { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from 'next-themes';
+import React, { type ReactNode } from 'react';
 
-const menuItems = [
-  { name: 'Home', path: '/' },
-  { name: 'Blog', path: '/blog' },
-];
+const menuItems = [{ name: 'Home', path: '/' }];
 
 const queryClient = new QueryClient();
 

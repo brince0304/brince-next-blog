@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import ClientLayout from '@/app/layout.client';
-import type { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ['latin'],
