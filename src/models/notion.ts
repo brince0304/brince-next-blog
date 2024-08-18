@@ -1,3 +1,5 @@
+import type {PageObjectResponse, QueryDatabaseResponse} from "@notionhq/client/build/src/api-endpoints";
+
 interface NotionUser {
   object: 'user';
   id: string;
@@ -70,36 +72,42 @@ interface NotionSelect {
   } | null;
 }
 
+interface NotionMultiSelect {
+    id: string;
+    type: 'multi_select';
+    multi_select: {
+        id: string;
+        name: string;
+        color: string;
+    }[];
+}
+
 interface NotionProperties {
   Title: NotionTitle;
   Date: NotionDate;
+  Excerpt: NotionRichTextProperty;
   Published: NotionCheckbox;
   Thumbnail: NotionURL;
   Slug: NotionRichTextProperty;
+  Tags: NotionMultiSelect;
 }
 
-interface NotionPage {
-  object: 'page';
+export interface NotionPage extends PageObjectResponse  {
   id: string;
   created_time: string;
   last_edited_time: string;
   created_by: NotionUser;
   last_edited_by: NotionUser;
-  cover: null | {
-    type: 'external';
-    external: { url: string };
-  };
-  icon: null | {
-    type: 'emoji';
-    emoji: string;
-  };
+  properties: NotionProperties & {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        [key: string]: any;
+  }
   parent: NotionParent;
   archived: boolean;
-  properties: NotionProperties;
   url: string;
 }
 
-export interface NotionDatabaseQueryResponse {
+export interface NotionDatabaseQueryResponse extends QueryDatabaseResponse{
   object: 'list';
   results: NotionPage[];
   next_cursor: string | null;
