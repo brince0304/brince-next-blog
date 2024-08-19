@@ -34,7 +34,6 @@ export function convertToCommentProps(comment: NotionPage): CommentProps {
     content: comment.properties.Comment.title[0].plain_text,
     createdAt: comment.properties.CreatedAt.created_time,
     liked: comment.properties.Liked.checkbox,
-    avatar: comment.properties.Author.rich_text[0].plain_text[0],
     owner: comment.properties.Owner.checkbox,
   };
 }
